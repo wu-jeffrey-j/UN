@@ -292,7 +292,7 @@ def request_download(file_path, filename, full_download_url, retries=5):
     for attempt in range(1, retries + 1):
         try:
             logger.info(f"📥 Downloading {filename}... (Attempt {attempt})")
-            with requests.get(full_download_url, headers=headers, stream=True, timeout=30) as dl:
+            with requests.get(full_download_url, headers=headers, stream=True, timeout=60) as dl:
                 dl.raise_for_status()
                 with open(file_path, "wb") as f:
                     for chunk in dl.iter_content(chunk_size=8192):
@@ -449,7 +449,7 @@ def download_zip(url, save_folder="./un_recordings", bucket=None):
     if bucket:
         try:
             # Create a sample blob name to check if this session exists
-            sample_blob_name = f"{GCS_PREFIX}/{os.path.basename(folder_path)}/sample.mp3"
+            sample_blob_name = f"{GCS_PREFIX}/{os.path.basename(folder_path)}/ORIGINAL.mp3"
             if blob_exists(bucket, sample_blob_name):
                 logger.info(f"⏭️ Session already exists on GCS: {folder_path}")
                 duration = datetime.now() - start_time
@@ -477,9 +477,9 @@ def download_zip(url, save_folder="./un_recordings", bucket=None):
             
             if success_count > 0:
                 logger.info(f"✅ Successfully uploaded {success_count}/{total_count} MP3 files to GCS")
-                # Delete the ZIP file after successful upload
+                # Delete the folder the ZIP file is in
                 try:
-                    os.remove(file_path)
+                    shutil.rmtree(folder_path)
                     logger.info(f"🗑️ Deleted ZIP file: {file_path}")
                 except Exception as e:
                     logger.warning(f"⚠️ Failed to delete ZIP file {file_path}: {e}")
@@ -488,6 +488,7 @@ def download_zip(url, save_folder="./un_recordings", bucket=None):
                 
         except Exception as e:
             logger.error(f"❌ Failed to extract/upload ZIP {file_path}: {e}")
+            shutil.rmtree(folder_path)
             error_msg = str(e)
     else:
         logger.warning(f"⚠️ No GCS bucket available, skipping upload")
@@ -558,15 +559,11 @@ if __name__ == "__main__":
         logger.warning("⚠️ GCS not available, will only download files locally")
 
     VM_ID = os.getenv("VM_ID")
-    # if VM_ID == "1":
-    #     pages = [0,1]
-    # elif VM_ID == "2":
-    #     pages = [2,3]
-    # elif VM_ID == "3":
-    #     pages = [4,5]
-    # elif VM_ID == "4":
-    #     pages = [6,7,8]
-    pages = [8]
+    if VM_ID == "1":
+        pages = [0,2,4,6]
+    elif VM_ID == "2":
+        pages = [1,3,5,7,8]
+    # pages = [8]
 
     all_session_links = []
     for page in pages:
