@@ -219,7 +219,9 @@ def extract_and_upload_zip(zip_path, folder_path, bucket):
         for mp3_file in mp3_files:
             try:
                 # Get relative path from the extracted folder
-                relative_path = os.path.relpath(mp3_file, folder_path)
+                folder_name = os.path.basename(folder_path)
+                file_name = os.path.basename(mp3_file)
+                relative_path = os.path.join(folder_name, file_name)
                 
                 if upload_mp3_to_gcs(bucket, mp3_file, relative_path):
                     success_count += 1
