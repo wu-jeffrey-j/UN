@@ -42,7 +42,7 @@ def find_links_to_skip(csv_file_path):
     return links_to_skip
 
 if __name__ == "__main__":
-    csv_path = 'un_recordings.csv'
+    csv_path = '../un_recordings.csv'
     skipped_links = find_links_to_skip(csv_path)
     
     if skipped_links:

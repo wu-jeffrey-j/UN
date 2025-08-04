@@ -188,7 +188,7 @@ def upload_to_gcs(max_workers: int = 2, delete_source: bool = False):
     # Configuration
     bucket_name = "un_recordings"
     prefix = "raw_audio"
-    source_dir = "un_recordings2"
+    source_dir = "../un_recordings2"
     
     # Initialize GCS client with timeout configuration
     try:

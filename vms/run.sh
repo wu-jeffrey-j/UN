@@ -45,7 +45,7 @@ for i in $(seq 1 $NUM_VMS); do
     --zone="$ZONE" \
     --machine-type="$MACHINE_TYPE" \
     --image="$IMAGE" \
-    --boot-disk-size=300GB \
+    --boot-disk-size=600GB \
     --metadata-from-file=startup-script="$STARTUP_SCRIPT" \
     --scopes=storage-full \
     --tags=un-scrapers \

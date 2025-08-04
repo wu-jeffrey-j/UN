@@ -22,4 +22,4 @@ def copy_mp3s_with_structure(src_root, dst_root):
                 print(f"Copied: {rel_path}")
 
 # Example usage
-copy_mp3s_with_structure("un_recordings", "un_recordings2")
+copy_mp3s_with_structure("../un_recordings", "../un_recordings2")
